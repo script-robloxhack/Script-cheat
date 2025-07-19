@@ -1,73 +1,48 @@
-local g = Instance.new("ScreenGui")
-g.Name = "ExecutorGUI"
-g.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Title):Require Executer Roblox Console
+Creator):09baRavenaaAlt
+Description):09baRavenaaAlt Made this script do not skid it or you will pay.im lazy to create.
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 200)
-frame.Position = UDim2.new(0.5, -150, 0.5, -100)
-frame.BackgroundColor3 = Color3.new(0, 0, 0)
-frame.BackgroundTransparency = 0.5
-frame.Active = true
-frame.Draggable = true
-frame.Parent = gui
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0, 200, 0, 99)
+textBox.Position = UDim2.new(0, 0, 0, 0)
+textBox.Parent = script.Parent
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 30)
-title.BackgroundColor3 = Color3.new(0, 0, 0)
-title.TextColor3 = Color3.new(1, 1, 1)
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 18
-title.Text = "Require Executor"
-title.Parent = frame
+local button = Instance.new("TextButton")
 
-local executeSection = Instance.new("Frame")
-executeSection.Size = UDim2.new(1, 0, 1, -30)
-executeSection.Position = UDim2.new(0, 0, 0, 30)
-executeSection.BackgroundColor3 = Color3.new(0, 0, 0)
-executeSection.BackgroundTransparency = 0.5
-executeSection.Parent = frame
+button.Size = UDim2.new(0, 50, 0, 99)
+button.Position = UDim2.new(1, -50, 0, 0)
+button.Text = "Execute"
+button.Parent = script.Parent
 
-local scriptTextBox = Instance.new("TextBox")
-scriptTextBox.Size = UDim2.new(1, -20, 0, 30)
-scriptTextBox.Position = UDim2.new(0, 10, 0, 10)
-scriptTextBox.BackgroundColor3 = Color3.new(1, 1, 1)
-scriptTextBox.TextColor3 = Color3.new(0, 0, 0)
-scriptTextBox.Font = Enum.Font.SourceSans
-scriptTextBox.TextSize = 14
-scriptTextBox.PlaceholderText = "Enter require Script here"
-scriptTextBox.Parent = executeSection
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 0, 20)
+textLabel.Position = UDim2.new(0, 0, -1, 0)
+textLabel.Text = "Roblox Console Require Executer"
+textLabel.Parent = script.Parent
 
-local executeButton = Instance.new("TextButton")
-executeButton.Size = UDim2.new(0.5, -15, 0, 30)
-executeButton.Position = UDim2.new(0, 10, 0, 50)
-executeButton.BackgroundColor3 = Color3.new(0, 0.5, 0)
-executeButton.TextColor3 = Color3.new(1, 1, 1)
-executeButton.Font = Enum.Font.SourceSansBold
-executeButton.TextSize = 14
-executeButton.Text = "Execute"
-executeButton.Parent = executeSection
+button.MouseButton1Click:Connect(function()
+    local requireScript = textBox.Text
+    require(requireScript)
+end)
 
-local clearButton = Instance.new("TextButton")
-clearButton.Size = UDim2.new(0.5, -15, 0, 30)
-clearButton.Position = UDim2.new(0.5, 5, 0, 50)
-clearButton.BackgroundColor3 = Color3.new(0.5, 0, 0)
-clearButton.TextColor3 = Color3.new(1, 1, 1)
-clearButton.Font = Enum.Font.SourceSansBold
-clearButton.TextSize = 14
-clearButton.Text = "Clear"
-clearButton.Parent = executeSection
-
-
-local function executeScript()
-    local scriptName = TextBox.Text
-    local success, script = pcall(require, scriptName)
+local dragGui = script.Parent:FindFirstChildOfClass("ClickDetector")
+if not dragGui then
+    dragGui = Instance.new("ClickDetector")
+    dragGui.Parent = script.Parent
 end
 
+local isDragging = false
+local offset = Vector3.new()
 
-local function clearScript()
-    scriptTextBox.Text = ""
-end
+dragGui.MouseClick:Connect(function()
+    isDragging = not isDragging
+    if isDragging then
+        offset = script.Parent.Position - game:GetService("UserInputService"):GetMouseLocation()
+    end
+end)
 
-
-executeButton.MouseButton1Click:Connect(executeScript)
-clearButton.MouseButton1Click:Connect(clearScript)
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and isDragging then
+        script.Parent.Position = game:GetService("UserInputService"):GetMouseLocation() + offset
+    end
+end)
