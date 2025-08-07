@@ -3,22 +3,22 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Biến lưu giá trị speed hiện tại
+-- Biến lưu speed hiện tại
 local currentSpeed = 16
 
--- Hàm áp dụng speed
+-- Hàm áp dụng speed cho nhân vật hiện tại
 local function applySpeed()
 	local character = player.Character or player.CharacterAdded:Wait()
 	local humanoid = character:WaitForChild("Humanoid")
 	humanoid.WalkSpeed = currentSpeed
 end
 
--- Gọi lần đầu
+-- Áp dụng ban đầu
 applySpeed()
 
--- Mỗi khi nhân vật mới được tạo lại (sau khi chết), áp dụng speed
+-- Mỗi khi nhân vật được tạo lại, áp dụng lại speed
 player.CharacterAdded:Connect(function()
-	task.wait(0.1) -- chờ nhân vật load xong
+	task.wait(0.1)
 	applySpeed()
 end)
 
@@ -28,7 +28,7 @@ gui.Name = "SpeedTextGui"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Nút mở/tắt
+-- Nút mở/tắt menu
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(0, 110, 0, 35)
 toggleBtn.Position = UDim2.new(0, 10, 0, 10)
@@ -54,7 +54,7 @@ frame.Parent = gui
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 30)
 title.BackgroundTransparency = 1
-title.Text = "⚡ Nhập tốc độ chạy"
+title.Text = "⚡ Speed từ 0 - 1000"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
@@ -64,7 +64,7 @@ title.Parent = frame
 local speedBox = Instance.new("TextBox")
 speedBox.Size = UDim2.new(0.85, 0, 0, 35)
 speedBox.Position = UDim2.new(0.075, 0, 0, 40)
-speedBox.PlaceholderText = "Tốc độ (16 - 1000)"
+speedBox.PlaceholderText = "Nhập speed (0 - 1000)"
 speedBox.Text = ""
 speedBox.Font = Enum.Font.Gotham
 speedBox.TextSize = 16
@@ -84,20 +84,20 @@ applyBtn.TextSize = 16
 applyBtn.Text = "Áp dụng"
 applyBtn.Parent = frame
 
--- Toggle ẩn/hiện
+-- Toggle ẩn/hiện menu
 toggleBtn.MouseButton1Click:Connect(function()
 	frame.Visible = not frame.Visible
 end)
 
--- Xử lý áp dụng speed khi bấm nút
+-- Áp dụng speed khi bấm nút
 applyBtn.MouseButton1Click:Connect(function()
 	local input = tonumber(speedBox.Text)
-	if input and input >= 16 and input <= 1000 then
+	if input and input >= 0 and input <= 1000 then
 		currentSpeed = input
 		applySpeed()
 		applyBtn.Text = "✅ OK: " .. input
 	else
-		applyBtn.Text = "❌ Sai! (16 - 1000)"
+		applyBtn.Text = "❌ Sai! (0 - 1000)"
 	end
 
 	task.wait(1.5)
