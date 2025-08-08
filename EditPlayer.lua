@@ -48,12 +48,13 @@ toggle.TextSize = 14
 toggle.Parent = gui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 90) -- Gọn hơn vì đã bỏ JumpPower
+frame.Size = UDim2.new(0, 300, 0, 90)
 frame.Position = UDim2.new(0, 10, 0, 50)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Visible = false
-frame.Active = true
-frame.Draggable = true
+-- ❌ Không cho kéo menu
+-- frame.Active = true
+-- frame.Draggable = true
 frame.Parent = gui
 
 -- Ô nhập WalkSpeed
