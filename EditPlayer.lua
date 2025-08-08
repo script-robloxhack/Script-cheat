@@ -32,12 +32,11 @@ player.CharacterAdded:Connect(function()
 	applyAll()
 end)
 
--- Giao diện GUI đơn giản
+-- GUI
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "SpeedJumpGUI"
 gui.ResetOnSpawn = false
 
--- Nút mở/tắt
 local toggle = Instance.new("TextButton")
 toggle.Size = UDim2.new(0, 120, 0, 35)
 toggle.Position = UDim2.new(0, 10, 0, 10)
@@ -48,19 +47,14 @@ toggle.Text = "⚙ Speed Menu"
 toggle.TextSize = 14
 toggle.Parent = gui
 
--- Khung chính
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 180)
+frame.Size = UDim2.new(0, 300, 0, 90) -- Gọn hơn vì đã bỏ JumpPower
 frame.Position = UDim2.new(0, 10, 0, 50)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Visible = false
-frame.Parent = gui
-
--- Cho phép kéo khung
-local drag = Instance.new("UITextSizeConstraint")
-drag.Parent = frame
 frame.Active = true
 frame.Draggable = true
+frame.Parent = gui
 
 -- Ô nhập WalkSpeed
 local speedBox = Instance.new("TextBox")
@@ -77,29 +71,14 @@ walkBtn.Position = UDim2.new(0, 200, 0, 10)
 walkBtn.Text = "Áp dụng WalkSpeed"
 walkBtn.Parent = frame
 
--- Ô nhập JumpPower
-local jumpBox = Instance.new("TextBox")
-jumpBox.Size = UDim2.new(0, 180, 0, 30)
-jumpBox.Position = UDim2.new(0, 10, 0, 60)
-jumpBox.PlaceholderText = "Nhập JumpPower (0 - 1000)"
-jumpBox.Text = tostring(currentJumpPower)
-jumpBox.Parent = frame
-
--- Nút áp dụng JumpPower
-local jumpBtn = Instance.new("TextButton")
-jumpBtn.Size = UDim2.new(0, 90, 0, 30)
-jumpBtn.Position = UDim2.new(0, 200, 0, 60)
-jumpBtn.Text = "Áp dụng JumpPower"
-jumpBtn.Parent = frame
-
 -- Nút Reset
 local resetBtn = Instance.new("TextButton")
 resetBtn.Size = UDim2.new(0, 280, 0, 30)
-resetBtn.Position = UDim2.new(0, 10, 0, 110)
+resetBtn.Position = UDim2.new(0, 10, 0, 50)
 resetBtn.Text = "🔄 Reset về mặc định"
 resetBtn.Parent = frame
 
--- Xử lý nút mở/tắt
+-- Toggle GUI
 toggle.MouseButton1Click:Connect(function()
 	frame.Visible = not frame.Visible
 end)
@@ -118,31 +97,16 @@ walkBtn.MouseButton1Click:Connect(function()
 	walkBtn.Text = "Áp dụng WalkSpeed"
 end)
 
--- Xử lý JumpPower
-jumpBtn.MouseButton1Click:Connect(function()
-	local val = tonumber(jumpBox.Text)
-	if val and val >= 0 and val <= 1000 then
-		currentJumpPower = val
-		applyJumpPower()
-		jumpBtn.Text = "✅ JumpPower OK"
-	else
-		jumpBtn.Text = "❌ Nhập sai (0–1000)"
-	end
-	task.wait(1.5)
-	jumpBtn.Text = "Áp dụng JumpPower"
-end)
-
--- Reset
+-- Reset về mặc định
 resetBtn.MouseButton1Click:Connect(function()
 	currentWalkSpeed = 16
 	currentJumpPower = 50
 	speedBox.Text = "16"
-	jumpBox.Text = "50"
 	applyAll()
 	resetBtn.Text = "✅ Đã reset"
 	task.wait(1.5)
 	resetBtn.Text = "🔄 Reset về mặc định"
 end)
 
--- Tự áp dụng lúc bắt đầu
+-- Áp dụng lần đầu
 applyAll()
